@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <title>Rust Sydney</title>
+
+    
+    <link rel="stylesheet" href="rust.css">
+<link rel="stylesheet" href="sliderust.css">
+<script src="sliderust.js"></script>
+
+
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+    <h1 class="title">Rust Sydney</h1>
+    <p><img src="logo-v1.png" alt=""></p>
+
+<p><a href="http://rust-lang.org/"><span style="font-size:80%">rust-lang.org</span></a></p>
+
+<p><a href="http://huonw.github.io/rust-sydney-feb15"><span style="font-size:70%; font-weight: normal;">huonw.github.io/rust-sydney-feb15</span></a></p>
+
+<h1 id="hi" class='section-header'><a
+                           href="#hi">Hi</a></h1>
+<p>I&#39;m Huon Wilson, long-time Rust contributor: wrote a patch, got
+hooked... Somehow now organising a meetup.</p>
+
+<p><img src="firstpatch.png" alt=""></p>
+
+<h1 id="preliminaries-&ndash;-thanks" class='section-header'><a
+                           href="#preliminaries-&ndash;-thanks">Preliminaries &ndash; Thanks</a></h1>
+<ul>
+<li>Rod Howarth and Envoy Advanced Technologies (@EnvoyAT)</li>
+<li>Mozilla</li>
+<li>Steve Klabnik</li>
+</ul>
+
+<h1 id="preliminaries" class='section-header'><a
+                           href="#preliminaries">Preliminaries</a></h1>
+<p>Conduct of conduct,
+<a href="http://rust-lang.org/conduct.html">rust-lang.org/conduct.html</a>. Summary:</p>
+
+<blockquote>
+<ul>
+<li>We are committed to providing a friendly, safe and welcoming
+environment for all.</li>
+<li>Please be kind and courteous. There&#39;s no need to be mean or rude.</li>
+<li>We will exclude you from interaction if you insult, demean or harass anyone.
+That is not welcome behaviour.</li>
+</ul>
+</blockquote>
+
+<h1 id="background" class='section-header'><a
+                           href="#background">Background</a></h1>
+<p>Open source
+(<a href="http://github.com/rust-lang/rust">github.com/rust-lang/rust</a>)
+programming language. Originally a personal project of Graydon Hoare,
+adopted by Mozilla Research in 2009.</p>
+
+<p><a href="http://blog.rust-lang.org/2015/01/09/Rust-1.0-alpha.html">1.0.0-alpha released</a>
+a month ago, full stable release soon!</p>
+
+<h1 id="rust&#39;s-aims" class='section-header'><a
+                           href="#rust&#39;s-aims">Rust&#39;s Aims</a></h1>
+<p>A haiku:</p>
+
+<blockquote>
+<p>a systems language<br/>
+pursuing the trifecta<br/>
+safe, concurrent, fast</p>
+</blockquote>
+
+<div class="attribution"><a href="http://twitter.com/lindsey">@lindsey</a></div>
+
+<h1 id="&quot;systems-language&quot;" class='section-header'><a
+                           href="#&quot;systems-language&quot;">&quot;Systems language&quot;</a></h1>
+<p>Control is critical, overhead minimal.</p>
+
+<p>No garbage collection, no &quot;runtime&quot;, use the OS directly where
+possible... write the OS too.</p>
+
+<h1></h1>
+
+<p><img src="embedded.jpg" />
+<div class="attribution"><a href="http://www.reddit.com/r/rust/comments/21qogc/im_making_a_note_here_huge_embedded_success/">
+farcaller on /r/rust</a></div></p>
+
+<h1 id="safe" class='section-header'><a
+                           href="#safe">Safe</a></h1>
+<p><em>Memory</em> safety is a priority, avoid GC with powerful static analysis:</p>
+
+<ul>
+<li>ownership,</li>
+<li>borrowing,</li>
+<li>lifetimes.</li>
+</ul>
+
+<p>Compiler uses annotations on pointers (etc.) to ensure they&#39;re always valid.</p>
+
+<h1 id="safe-&ndash;-lifetimes" class='section-header'><a
+                           href="#safe-&ndash;-lifetimes">Safe &ndash; lifetimes</a></h1><pre id='rust-example-rendered' class='rust '>
+<span class='kw'>fn</span> <span class='ident'>get_ten</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span>(<span class='ident'>map</span>: <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>HashMap</span><span class='op'>&lt;</span><span class='ident'>i32</span>, <span class='ident'>String</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;a</span> <span class='ident'>String</span> {
+    <span class='kw'>let</span> <span class='ident'>val</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='ident'>map</span>[<span class='number'>10</span>];
+
+    <span class='ident'>val</span>
+}
+</pre>
+
+<p><img src="lifetimes.png" alt=""></p>
+
+<h1 id="concurrent" class='section-header'><a
+                           href="#concurrent">Concurrent</a></h1>
+<p>Rust provides tools to handle shared state and message passing
+safely, e.g.</p>
+
+<ul>
+<li><code>Arc&lt;String&gt;</code>, immutable <a href="http://doc.rust-lang.org/nightly/std/sync/struct.Arc.html">shared memory</a></li>
+<li><code>Arc&lt;Mutex&lt;String&gt;&gt;</code>, <a href="http://doc.rust-lang.org/nightly/std/sync/struct.Mutex.html">mutable</a> shared memory</li>
+<li><code>channel::&lt;String&gt;()</code>, <a href="http://doc.rust-lang.org/nightly/std/sync/mpsc/">message passing</a></li>
+</ul>
+
+<p>No data races: locking/atomicity enforced when required.</p>
+
+<h1 id="concurrent-1" class='section-header'><a
+                           href="#concurrent-1">Concurrent</a></h1>
+<p>Possible to implement a general <code>parallel_map</code> in safe code (in the
+near future: <a href="https://github.com/rust-lang/rfcs/pull/458">RFC 258</a>), e.g. usable like:</p>
+<pre id='rust-example-rendered' class='rust '>
+<span class='comment'>// Eight integers on the stack</span>
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>stack_buffer</span> <span class='op'>=</span> [<span class='number'>0</span>; <span class='number'>8</span>];
+
+<span class='comment'>// add one to each, in parallel</span>
+<span class='ident'>parallel_map</span>(<span class='ident'>stack_buffer</span>.<span class='ident'>iter_mut</span>(), <span class='op'>|</span><span class='ident'>item</span><span class='op'>|</span> {
+    <span class='comment'>// item is a pointer into the main thread&#39;s stack</span>
+    <span class='op'>*</span><span class='ident'>item</span> <span class='op'>+=</span> <span class='number'>1</span>
+});
+
+<span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;{:?}&quot;</span>, <span class='kw-2'>&amp;</span><span class='ident'>stack_buffer</span>[]); <span class='comment'>// [1, 1, ..., 1];</span>
+</pre>
+
+<p>Lifetimes, and the <code>Send</code> &amp; <code>Sync</code> traits allow the compiler to guarantee safety.</p>
+
+<h1 id="fast" class='section-header'><a
+                           href="#fast">Fast</a></h1>
+<p>Few runtime language features to stand in the way of the
+compiler. Standard libraries abstractions try to optimise well.</p>
+
+<p><img src="benchmarksgame.png"/>
+<div class="attribution"><a href="http://benchmarksgame.alioth.debian.org/u32/rust.php">
+Benchmarks game, x86 one core</a></div></p>
+
+<h1 id="fast-1" class='section-header'><a
+                           href="#fast-1">Fast</a></h1>
+<p>&quot;Functional programming&quot; iterators feel high-level:</p>
+<pre id='rust-example-rendered' class='rust '>
+<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>sum</span>(<span class='ident'>x</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>i32</span>]) <span class='op'>-&gt;</span> <span class='ident'>i32</span> {
+    <span class='ident'>x</span>.<span class='ident'>iter</span>().<span class='ident'>fold</span>(<span class='number'>0</span>, <span class='op'>|</span><span class='ident'>a</span>, <span class='ident'>b</span><span class='op'>|</span> <span class='ident'>a</span> <span class='op'>+</span> <span class='op'>*</span><span class='ident'>b</span>)
+}
+</pre>
+
+<p>Vectorised by LLVM! (16 <code>i32</code>s per iteration.)</p>
+
+<pre><code class="language-asm">.LBB0_4:
+    vpaddd  -48(%rdx), %xmm0, %xmm0
+    vpaddd  -32(%rdx), %xmm1, %xmm1
+    vpaddd  -16(%rdx), %xmm2, %xmm2
+    vpaddd  (%rdx), %xmm3, %xmm3
+    addq    $64, %rdx
+    addq    $-16, %rdi
+    jne .LBB0_4
+</code></pre>
+
+<h1 id="projects" class='section-header'><a
+                           href="#projects">Projects</a></h1>
+<ul>
+<li>Operating systems/bare metal (<code>#rust-osdev</code>): <a href="http://zinc.rs">zinc</a></li>
+<li>Games (<code>#rust-gamedev</code>): <a href="http://piston.rs">piston</a>, <a href="https://github.com/csherratt/snowmew">snowmew</a>, <a href="https://github.com/pistondevelopers/hematite">hematite</a></li>
+<li>Web servers/development (<code>#rust-webdev</code>): <a href="http://ironframework.io/">iron</a>, <a href="http://nickel.rs/">nickel.rs</a></li>
+<li>Web browser(s): <a href="https://github.com/servo/servo">servo</a></li>
+<li>Cryptography (<code>#rust-crypto</code>)</li>
+<li>Rust&#39;s compiler and standard library (<code>#rust-internals</code>)</li>
+</ul>
+
+    <script type="text/javascript">
+        window.playgroundUrl = "";
+    </script>
+    
+</body>
+</html>
