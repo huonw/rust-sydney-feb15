@@ -113,4 +113,10 @@ window.addEventListener('load', function () {
             update();
         }
     });
+
+    function height() {
+        document.body.style.height = window.innerHeight + 'px';
+    }
+    //window.addEventListener('resize', function(ev) { height(); });
+    //height();
 });

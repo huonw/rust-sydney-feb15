@@ -6,6 +6,10 @@ h1 {
     font-size: 70px;
 }
 
+h2 {
+    font-size: 50px;
+}
+
 body, h5 {
     font-size: 35px;
 }
@@ -44,9 +48,15 @@ pre, code {
 ul {
     list-style: none;
 }
+ul, ol {
+  padding-left: 40px;
+}
 
 li::before {
     content: "\2022\A0";
+    display: inline-block;
+    width: 40px;
+    margin-left: -40px;
 }
 
 #nav-symbols {
@@ -66,4 +76,32 @@ li::before {
 }
 .disabled {
     color: lightgray;
+}
+
+
+/* customisation */
+
+blockquote p {
+  font-size: inherit;
+}
+.attribution {
+  text-align: right;
+  font-size: 90%;
+  font-weight: normal;
+}
+.attribution::before {
+  content: "— ";
+}
+
+img {
+  display: block;
+  max-height: 900px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+h1:empty {
+  margin: 10px 0;
+  padding: 0;
+  border: none;
 }
